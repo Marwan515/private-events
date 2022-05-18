@@ -14,20 +14,3 @@
  *= require_self
  */
 @import "bulma";
-
-.notification:not(:last-child) {
-    margin-bottom: 0;
-}
-
-.navbar-brand .title {
-    color: rgb(0, 255, 242);
-}
-
-.bg-orange {
-    background-color: orange;
-}
-
-.grbtn {
-    background-color: green;
-    color: gold;
-}
