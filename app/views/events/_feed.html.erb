@@ -1,0 +1,36 @@
+<div class="column is-mobile">
+    <%= @events.each do |e| %>
+      <div class="box">
+            <article class="media">
+                <div class="media-left">
+                    <figure class="image is-64x64">
+                    <%= gravatar_image_tag(p.user.name, size: 64, alt: p.user.name) %>
+                    </figure>
+                </div>
+                <div class="media-content">
+                    <div class="content">
+                        <strong><%= e.user.name %></strong>
+                        <small>@<%= e.user.username %></small>
+                        <h5><%= e.title %></h5>
+                        <p><%= e.description %></p>
+                    </div>
+                    <nav class="level">
+                    <div class="level-left is-mobile">
+                    <%= link_to e, class: "level-item" do %>
+                    <span class="icon"><i class="fa fa-link c-orange" aria-hidden="true"></i></span>
+                    <% end %>
+                    <% if user_signed_in? && current_user.id == e.user_id %>
+                        <%= link_to edit_post_path(e), class: "level-item" do %>
+                        <span class="icon"><i class="fa fa-pencil c-orange" aria-hidden="true"></i></span>
+                        <% end %>
+                        <%= link_to e, method: :delete, data: {confirm: "Are You Sure You Want To Delete This Event"} do %>
+                        <span class="icon"><i class="fa fa-trash c-orange" aria-hidden="true"></i></span>
+                        <% end %>
+                    <% end %>
+                    </div>
+                    </nav>
+                </div>
+            </article>
+      </div>
+    <% end %>
+</div>
