@@ -13,7 +13,7 @@ class EventsController < ApplicationController
 
   # GET /events/new
   def new
-    @event = Event.new
+    @event = current_user.created_events.build
   end
 
   # GET /events/1/edit
@@ -22,7 +22,7 @@ class EventsController < ApplicationController
 
   # POST /events or /events.json
   def create
-    @event = Event.new(event_params)
+    @event = current_user.created_events.build(event_params)
 
     respond_to do |format|
       if @event.save
@@ -56,6 +56,22 @@ class EventsController < ApplicationController
       format.html { redirect_to events_url, notice: "Event was successfully destroyed." }
       format.json { head :no_content }
     end
+  end
+
+  def attend_e
+    @event = Event.find(params[:id])
+    if @event.attendeds.include?(current_user)
+      redirect_to @event, notice: "You are already on the list"
+    else
+      @event.attendeds << current_user
+      redirect_to @event, notice: "You Joined The Even Successfully!"
+    end
+  end
+
+  def cancel_attendence
+    @event = Event.find(params[:id])
+    @event.attendeds.delete(current_user)
+    redirect_to @event, notice: "You are no longer attending this event"
   end
 
   private

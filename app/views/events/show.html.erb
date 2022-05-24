@@ -7,9 +7,15 @@
         <%= render @event %>
 
         <div>
-          <% if user_signed_in? && user.id == post.user_id %>
+          <% if user_signed_in? && user.id == event.user_id %>
             <%= link_to "Edit this event", edit_event_path(@event) %> |
-            <%= button_to "Destroy this event", @event, method: :delete %>
+            <%= button_to "Destroy this event", class:" is-danger", @event, method: :delete %>
+          <% elsif user_signed_in? && user.id != event.creator_id %>
+            <% if event.attendeds.include?(current_user) %>
+              <%= button_to "Cancel Attendence", cancel_attendence_event_path(event), class:" is-danger" %>
+            <% else %>
+              <%= button_to "Attend Event", attend_e_event_path(event), class:" is-primary",  %>
+            <% end %>
           <% end %>
           <%= link_to "Back to event's", events_path %>
         </div>
