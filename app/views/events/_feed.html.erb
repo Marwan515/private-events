@@ -2,29 +2,29 @@
     <%= @events.each do |e| %>
       <div class="box">
             <article class="media">
-                <div class="media-left">
-                    <figure class="image is-64x64">
-                    <%= gravatar_image_tag(p.user.name, size: 64, alt: p.user.name) %>
-                    </figure>
-                </div>
                 <div class="media-content">
                     <div class="content">
-                        <strong><%= e.user.name %></strong>
-                        <small>@<%= e.user.username %></small>
+                        <strong>@<%= e.creator.username %></strong>
                         <h5><%= e.title %></h5>
                         <p><%= e.description %></p>
                     </div>
                     <nav class="level">
                     <div class="level-left is-mobile">
                     <%= link_to e, class: "level-item" do %>
-                    <span class="icon"><i class="fa fa-link c-orange" aria-hidden="true"></i></span>
+                    <span class="icon"><i class="fa fa-link" aria-hidden="true"></i></span>
                     <% end %>
-                    <% if user_signed_in? && current_user.id == e.user_id %>
-                        <%= link_to edit_post_path(e), class: "level-item" do %>
-                        <span class="icon"><i class="fa fa-pencil c-orange" aria-hidden="true"></i></span>
+                    <% if user_signed_in? && current_user.id == e.creator_id %>
+                        <%= link_to edit_event_path(e), class: "level-item" do %>
+                        <span class="icon"><i class="fa fa-pencil" aria-hidden="true"></i></span>
                         <% end %>
                         <%= link_to e, method: :delete, data: {confirm: "Are You Sure You Want To Delete This Event"} do %>
-                        <span class="icon"><i class="fa fa-trash c-orange" aria-hidden="true"></i></span>
+                        <span class="icon"><i class="fa fa-trash" aria-hidden="true"></i></span>
+                        <% end %>
+                    <% elsif user_signed_in? && current_user.id != e.creator_id %>
+                        <% if e.attendeds.include?(current_user) %>
+                            <%= link_to "Cancel Attendence", cancel_attendence_event_path(e), class:"is-danger" %>
+                        <% else %>
+                            <%= link_to "Attend Event", attend_event_path(e), class:"is-primary" %>
                         <% end %>
                     <% end %>
                     </div>

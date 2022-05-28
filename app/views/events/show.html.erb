@@ -5,16 +5,27 @@
         <p style="color: green"><%= notice %></p>
 
         <%= render @event %>
+        <div>
+          <p class="title is-2"><%= @event.title %></p>
+          <br>
+          <p class="subtitle is-2"><%= @event.description %></p>
+          <br>
+          <p class="subtitle is-2"><%= @event.location %></p>
+          <p class="text-muted">
+            <i class="far fa-calendar-alt text-dark fa-lg mr-1"></i>
+            <%= @event.date_time.strftime("%B %-d, %Y at %l:%M %p") %>
+          </p>
+        </div>
 
         <div>
-          <% if user_signed_in? && user.id == event.user_id %>
-            <%= link_to "Edit this event", edit_event_path(@event) %> |
-            <%= button_to "Destroy this event", class:" is-danger", @event, method: :delete %>
-          <% elsif user_signed_in? && user.id != event.creator_id %>
+          <% if user_signed_in? && current_user == @event.creator %>
+            <%= link_to "Edit this event", edit_event_path, class: "btn is-primary" %>
+            <%= link_to "Destroy this event", event_path, method: :delete, class: "btn is-danger", data: { confirm: 'Are You Sure You Want To Delete This Event?' } %>
+          <% elsif user_signed_in? && current_user != @event.creator %>
             <% if event.attendeds.include?(current_user) %>
-              <%= button_to "Cancel Attendence", cancel_attendence_event_path(event), class:" is-danger" %>
+              <%= link_to "Cancel Attendence", cancel_attendence_event_path(event), class: "is-danger" %>
             <% else %>
-              <%= button_to "Attend Event", attend_e_event_path(event), class:" is-primary",  %>
+              <%= link_to "Attend Event", attend_event_path(event), class: "is-primary" %>
             <% end %>
           <% end %>
           <%= link_to "Back to event's", events_path %>

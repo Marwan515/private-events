@@ -13,7 +13,7 @@ class EventsController < ApplicationController
 
   # GET /events/new
   def new
-    @event = current_user.created_events.build
+    @event = current_user.creator.build
   end
 
   # GET /events/1/edit
@@ -22,7 +22,7 @@ class EventsController < ApplicationController
 
   # POST /events or /events.json
   def create
-    @event = current_user.created_events.build(event_params)
+    @event = current_user.creator.build(event_params)
 
     respond_to do |format|
       if @event.save
@@ -58,7 +58,7 @@ class EventsController < ApplicationController
     end
   end
 
-  def attend_e
+  def attend
     @event = Event.find(params[:id])
     if @event.attendeds.include?(current_user)
       redirect_to @event, notice: "You are already on the list"
@@ -82,6 +82,6 @@ class EventsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def event_params
-      params.require(:event).permit(:title, :description, :location, :date)
+      params.require(:event).permit(:title, :description, :location, :date_time)
     end
 end
