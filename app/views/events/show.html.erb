@@ -23,9 +23,15 @@
             <%= link_to "Destroy this event", event_path, method: :delete, class: "btn is-danger", data: { confirm: 'Are You Sure You Want To Delete This Event?' } %>
           <% elsif user_signed_in? %>
             <% if Attendee.exists?(attended_id: current_user.id, attended_event_id: @event.id) %>
-              <%= link_to "Cancel Attendence", cancel_attendence_event_path(@event), class: "btn is-danger" %>
+              <%= link_to "Cancel Attendence", method: :delete, class: "btn is-danger" %>
             <% else %>
-              <%= link_to "Attend Event", attend_event_path(@event), class: "btn is-primary" %>
+              <%= simple_form_for(@attendee) do |a| %>
+                <%= a.hidden_field :attended_id, :value => current_user.id %>
+                <%= a.hidden_field :attended_event_id, :value => @event.id %>
+                <%= button_tag type: 'submit', class: 'btn is-info' do %>
+                  <p>Attend Event</p>
+                <% end %>
+              <% end %>
             <% end %>
           <% end %>
           <%= link_to "Back to event's", events_path %>
