@@ -3,8 +3,5 @@ class Event < ApplicationRecord
     has_many :attendees
     has_many :attendeds, through: :attendees
 
-    validates :title, presence: true
-    validates :description, presence: true
-    validates :location, presence: true
-    validates :date, presence: true
+    validates :title, :description, :location, :date_time, presence: true
 end

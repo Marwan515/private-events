@@ -12,8 +12,8 @@
 
 ActiveRecord::Schema[7.0].define(version: 2022_05_09_183206) do
   create_table "attendees", force: :cascade do |t|
-    t.integer "attended_id", null: false
-    t.integer "attended_event_id", null: false
+    t.integer "attended_id"
+    t.integer "attended_event_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["attended_event_id"], name: "index_attendees_on_attended_event_id"

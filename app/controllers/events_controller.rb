@@ -60,17 +60,18 @@ class EventsController < ApplicationController
 
   def attend
     @event = Event.find(params[:id])
-    if @event.attendeds.include?(current_user)
-      redirect_to @event, notice: "You are already on the list"
+    attendy = Attendee.new(attended_id: current_user.id, attended_event_id: @event.id)
+    if attendy.save
+      redirect_to @event, notice: "You Are Attending The Event Successfully!"
     else
-      @event.attendeds << current_user
-      redirect_to @event, notice: "You Joined The Even Successfully!"
+      redirect_to @event, notice: "You Are Already Attending"
     end
   end
 
   def cancel_attendence
     @event = Event.find(params[:id])
-    @event.attendeds.delete(current_user)
+    del_attend = Attendee.find_by(attended_id: current_user.id, attended_event_id: @event.id)
+    del_attend.destroy
     redirect_to @event, notice: "You are no longer attending this event"
   end
 
