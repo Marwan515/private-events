@@ -21,17 +21,13 @@
           <% if user_signed_in? && current_user == @event.creator %>
             <%= link_to "Edit this event", edit_event_path, class: "btn is-primary" %>
             <%= link_to "Destroy this event", event_path, method: :delete, class: "btn is-danger", data: { confirm: 'Are You Sure You Want To Delete This Event?' } %>
-          <% elsif user_signed_in? %>
-            <% if Attendee.exists?(attended_id: current_user.id, attended_event_id: @event.id) %>
-              <%= link_to "Cancel Attendence", method: :delete, class: "btn is-danger" %>
-            <% else %>
-              <%= simple_form_for(@attendee) do |a| %>
-                <%= a.hidden_field :attended_id, :value => current_user.id %>
-                <%= a.hidden_field :attended_event_id, :value => @event.id %>
-                <%= button_tag type: 'submit', class: 'btn is-info' do %>
-                  <p>Attend Event</p>
-                <% end %>
-              <% end %>
+          <% elsif user_signed_in? && @event.attendeds.include?(current_user.id) %>
+            <%= link_to "Cancel Attendence", method: :delete, class: "btn is-danger" %>
+          <% else %>
+            <%= simple_form_for(@attendee) do |a| %>
+              <%= a.hidden_field :attended_id, :value => current_user.id %>
+              <%= a.hidden_field :attended_event_id, :value => @event.id %>
+              <%= button_to 'Attend', event_path, class:"btn is-info" %>
             <% end %>
           <% end %>
           <%= link_to "Back to event's", events_path %>
