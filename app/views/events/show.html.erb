@@ -18,19 +18,32 @@
         </div>
 
         <div>
-          <% if user_signed_in? && current_user == @event.creator %>
-            <%= link_to "Edit this event", edit_event_path, class: "btn is-primary" %>
-            <%= link_to "Destroy this event", event_path, method: :delete, class: "btn is-danger", data: { confirm: 'Are You Sure You Want To Delete This Event?' } %>
-          <% elsif user_signed_in? && @event.attendeds.include?(current_user.id) %>
-            <%= link_to "Cancel Attendence", method: :delete, class: "btn is-danger" %>
-          <% else %>
-            <%= simple_form_for(@attendee) do |a| %>
-              <%= a.hidden_field :attended_id, :value => current_user.id %>
-              <%= a.hidden_field :attended_event_id, :value => @event.id %>
-              <%= button_to 'Attend', event_path, class:"btn is-info" %>
+          <% if !Event.past.include?(@event) %>
+            <% if !user_signed_in? %>
+              <%= link_to 'Log In', new_user_session_path, class:"button is-info" %>
+              <%= link_to 'Sign Up', new_user_registration_path, class:"button is-info" %>
+            <% elsif current_user == @event.creator %>
+              <%= link_to "Edit this event", edit_event_path, class: "button is-primary" %>
+              <%= link_to "Destroy this event", event_path, method: :delete, class: "button is-danger", data: { confirm: 'Are You Sure You Want To Delete This Event?' } %>
+            <% elsif user_signed_in? && @event.attendeds.include?(current_user) %>
+              <%= button_to 'Cancel Attendence', attendee_path, data: { turbo_method: :delete }, class:"button is-danger" %>
+            <% else %>
+              <%= simple_form_for(@attendee) do |a| %>
+                <%= a.hidden_field :attended_id, :value => current_user.id %>
+                <%= a.hidden_field :attended_event_id, :value => @event.id %>
+                <%= button_to 'Attend', attendees_path, class:"button is-info" %>
+              <% end %>
             <% end %>
+          <% else %>
+              <% if !user_signed_in? %>
+                <%= link_to 'Log In', new_user_session_path, class:"button is-info" %>
+                <%= link_to 'Sign Up', new_user_registration_path, class:"button is-info" %>
+              <% elsif current_user == @event.creator %>
+                <%= link_to "Edit this event", edit_event_path, class: "button is-primary" %>
+                <%= link_to "Destroy this event", event_path, method: :delete, class: "button is-danger", data: { confirm: 'Are You Sure You Want To Delete This Event?' } %>
+              <% end %>
           <% end %>
-          <%= link_to "Back to event's", events_path %>
+          <%= link_to "Back to event's", events_path, class:"button is-info" %>
         </div>
       </div>
     </div>
