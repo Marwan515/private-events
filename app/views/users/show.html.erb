@@ -1,0 +1,71 @@
+<div class="column is-mobile">
+  <h3 class="title"><%= current_user.username %></h3>
+  <br>
+  <% created_events = @user.creator.order(:date_time) %>
+  <h2 class="title">Created Events</h2>
+  <% if created_events.any? %>
+    <% created_events.each do |e| %>
+      <div class="box">
+            <article class="media">
+                <div class="media-content">
+                    <div class="content">
+                        <strong>@<%= e.creator.username %></strong>
+                        <h5><%= e.title %></h5>
+                        <p><%= e.description %></p>
+                    </div>
+                    <nav class="level">
+                    <div class="level-left is-mobile">
+                    <%= link_to e, class: "level-item" do %>
+                    <span class="icon"><i class="fa fa-link" aria-hidden="true"></i></span>
+                    <% end %>
+                    <% if user_signed_in? && current_user.id == e.creator_id %>
+                        <%= link_to edit_event_path(e), class: "level-item" do %>
+                          <span class="icon"><i class="fa fa-pencil" aria-hidden="true"></i></span>
+                        <% end %>
+                        <%= link_to e, method: :delete, data: {confirm: "Are You Sure You Want To Delete This Event"} do %>
+                          <span class="icon"><i class="fa fa-trash" aria-hidden="true"></i></span>
+                        <% end %>
+                    <% end %>
+                    </div>
+                    </nav>
+                </div>
+            </article>
+      </div>
+    <% end %>
+  <% else %>
+    <%= link_to 'Create A New Event', new_event_path, class:"button is-info" %>
+  <% end %>
+  <h2 class="title">Attending/Attended Events</h2>
+  <% attended_e = @user.attended_events.order(:date_time) %>
+  <% if attended_e.any? %>
+    <% attended_e.each do |a| %>
+      <div class="box">
+            <article class="media">
+                <div class="media-content">
+                    <div class="content">
+                        <strong>@<%= a.creator.username %></strong>
+                        <h5><%= a.title %></h5>
+                        <p><%= a.description %></p>
+                    </div>
+                    <nav class="level">
+                    <div class="level-left is-mobile">
+                    <%= link_to a, class: "level-item" do %>
+                    <span class="icon"><i class="fa fa-link" aria-hidden="true"></i></span>
+                    <% end %>
+                    <% if user_signed_in? && current_user.id == a.creator_id %>
+                        <%= link_to edit_event_path(e), class: "level-item" do %>
+                          <span class="icon"><i class="fa fa-pencil" aria-hidden="true"></i></span>
+                        <% end %>
+                        <%= link_to e, method: :delete, data: {confirm: "Are You Sure You Want To Delete This Event"} do %>
+                          <span class="icon"><i class="fa fa-trash" aria-hidden="true"></i></span>
+                        <% end %>
+                    <% end %>
+                    </div>
+                    </nav>
+                </div>
+            </article>
+      </div>
+    <% end %>
+  <% end %>
+  <%= link_to 'Edit Account', edit_user_registration_path, class:"button is-info" %>
+</div>

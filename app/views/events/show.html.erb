@@ -26,12 +26,17 @@
               <%= link_to "Edit this event", edit_event_path, class: "button is-primary" %>
               <%= link_to "Destroy this event", event_path, method: :delete, class: "button is-danger", data: { confirm: 'Are You Sure You Want To Delete This Event?' } %>
             <% elsif user_signed_in? && @event.attendeds.include?(current_user) %>
-              <%= button_to 'Cancel Attendence', attendee_path, data: { turbo_method: :delete }, class:"button is-danger" %>
+              <% attendy = Attendee.where(attended_id: current_user, attended_event_id: @event) %>
+              <%= link_to attendy.first, data: { turbo_method: :delete }, class:"button is-danger", data: { confirm: "Are You Sure?" } do %>
+                <p class="button is-danger">Cancel Attendence</p>
+              <% end %>
             <% else %>
               <%= simple_form_for(@attendee) do |a| %>
                 <%= a.hidden_field :attended_id, :value => current_user.id %>
                 <%= a.hidden_field :attended_event_id, :value => @event.id %>
-                <%= button_to 'Attend', attendees_path, class:"button is-info" %>
+                <%= button_tag type: 'submit', class:"button is-info" do %>
+                  <p class="button is-info">Attend</p>
+                <% end %>
               <% end %>
             <% end %>
           <% else %>

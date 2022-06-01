@@ -43,7 +43,11 @@
               </p>
               <% if user_signed_in? %>
                 <p class="control">
-                  <%= link_to current_user.username, edit_user_registration_path, class: "button is-info" %>
+                  <%= link_to current_user, class:"button is-info" do %>
+                    <span>
+                      <%= current_user.username %>
+                    </span>
+                  <% end %>
                 </p>
                 <p class="control">
                   <%= button_to "Logout", destroy_user_session_path, method: :delete, class: "button is-info" %>

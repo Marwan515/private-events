@@ -1,6 +1,4 @@
 class AttendeesController < ApplicationController
-  before_action :set_event
-  before_action :set_attended
   before_action :authenticate_user!
 
   def create
@@ -19,17 +17,16 @@ class AttendeesController < ApplicationController
   def destroy
     @attended.destroy
 
-    redirect_to @event
+    redirect_to root_path
   end
   private
+    def set_attended
+      @attended = Attendee.find(params[:id])
+    end
 
     def set_event
       @event = Event.find(params[:id])
     end
-
-    def set_attended
-      @attended = Attendee.find(params[:id])
-    end  
     # Only allow a list of trusted parameters through.
     def attended_params
       params.require(:attendee).permit(:attended_id, :attended_event_id)
