@@ -24,4 +24,8 @@ test:
 
 production:
   <<: *default
-  database: db/production
+  database: private-events_production
+  username: m
+  password: <%= ENV['MYSITE_DATABASE_PASSWORD'] %>
+  url: <%= ENV['DATABASE_URL'] %>
+
